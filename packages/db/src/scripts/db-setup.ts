@@ -22,7 +22,8 @@ async function runPnpmCommand(commandLabel: string, args: string[]) {
     const child = spawn(pnpmBinary, args, {
       cwd: packageRoot,
       env: process.env,
-      stdio: 'inherit'
+      stdio: 'inherit',
+      shell: process.platform === 'win32'
     });
 
     child.on('error', (error) => {

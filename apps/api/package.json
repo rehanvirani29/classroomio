@@ -9,7 +9,7 @@
   ],
   "scripts": {
     "build": "tsc && tsc-alias",
-    "build:clean": "rm -rf dist tsconfig.tsbuildinfo && pnpm run build",
+    "build:clean": "node -e \"['dist','tsconfig.tsbuildinfo'].forEach(p=>require('fs').rmSync(p,{recursive:true,force:true}))\" && pnpm run build",
     "dev": "pnpm --filter @cio/api --parallel \"/^dev:.*/\"",
     "dev:server": "tsx watch src/index.ts",
     "dev:tsc": "tsc -p tsconfig.json --watch",
@@ -38,6 +38,9 @@
     }
   },
   "dependencies": {
+    "@ai-sdk/anthropic": "^3.0.69",
+    "@ai-sdk/google": "^3.0.0",
+    "@ai-sdk/openai": "^3.0.52",
     "@aws-sdk/client-s3": "^3.388.0",
     "@aws-sdk/s3-request-presigner": "^3.675.0",
     "@cio/ai-assistant": "workspace:*",
@@ -52,6 +55,7 @@
     "@sentry/profiling-node": "^7.110.1",
     "ai": "^6.0.158",
     "axios": "^1.4.0",
+    "css-tree": "^3.2.1",
     "dotenv": "^16.3.1",
     "drizzle-orm": "^0.44.7",
     "hono": "^4.11.3",

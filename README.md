@@ -81,7 +81,9 @@ The repository also contains shared packages under `packages/` (for example `pac
 
 ## Development
 
-### Local Setup
+### Start Here
+
+Before using either automated setup or the manual setup path below, first get the repo locally:
 
 1. Fork the repo, then clone it:
 
@@ -95,7 +97,55 @@ The repository also contains shared packages under `packages/` (for example `pac
    cd classroomio
    ```
 
-3. Set up Node (using `nvm`):
+### Automated Setup (Windows only)
+
+> **Note:** The automated setup scripts (`setup-machine.ps1`, `start-dev.ps1`) are PowerShell-based and designed for Windows. If you are on macOS or Linux, use the [Manual Setup](#manual-setup-alternative) path below.
+
+After cloning the repo and changing into the project folder, you can bootstrap local development with one command.
+If Node `v20.19.3` and Docker are already installed and ready, run:
+
+```bash
+corepack pnpm setup:dev
+```
+
+If you are on a fresh Windows machine and those prerequisites are not ready yet, use the PowerShell bootstrap instead:
+
+```powershell
+.\scripts\setup-machine.ps1 -DryRun
+.\scripts\setup-machine.ps1
+```
+
+What it does:
+
+- creates missing local `.env` files for the root, API, and dashboard apps and pre-fills all required values for local development (`DATABASE_URL`, `REDIS_URL`, `AUTH_BEARER_TOKEN`, `BETTER_AUTH_SECRET`, `PUBLIC_SERVER_URL`, `PRIVATE_SERVER_KEY`, `PUBLIC_IS_SELFHOSTED`, and more) — no manual `.env` editing needed to get started
+- installs workspace dependencies with `corepack pnpm install`
+- starts Postgres and Redis when Docker is installed and running
+- optionally starts MinIO for local object storage (needed only for file upload features) — use `corepack pnpm setup:dev:minio` instead of `setup:dev` to enable it
+
+If it prints a **Next steps** section (e.g. reopen terminal, start Docker Desktop), follow those steps and run `.\scripts\setup-machine.ps1` again. Each run continues from where the last one left off.
+
+When a setup command prints an `Action required` section, resolve those items before continuing.
+
+Once setup completes, start the dev servers:
+
+```powershell
+.\scripts\start-dev.ps1
+```
+
+This opens `api:dev` and `dashboard:dev` each in their own terminal tab (Windows Terminal) or window (fallback). Services will be available at:
+
+- API: http://localhost:3002
+- Dashboard: http://localhost:5173
+
+`setup:doctor` intentionally exits with a non-zero status when prerequisites are missing so it can be used in CI or onboarding checks.
+`setup:infra` also exits non-zero when required prerequisites are missing.
+`setup:dev` may finish with warnings; only start the dev servers after its action items are resolved.
+
+### Manual Setup (Alternative)
+
+If you do not want to use the automated setup commands above, follow this manual setup path instead.
+
+1. Set up Node (using `nvm`):
 
    ```bash
    nvm use
@@ -109,13 +159,13 @@ The repository also contains shared packages under `packages/` (for example `pac
 
    You can install nvm from [here](https://github.com/nvm-sh/nvm).
 
-4. Install dependencies:
+2. Install dependencies:
 
    ```bash
    pnpm i
    ```
 
-5. Set up your `.env` files:
+3. Set up your `.env` files:
 
    - Go to `apps/dashboard` and `apps/api`.
    - Duplicate the `.env.example` file and rename it to `.env`
@@ -124,17 +174,16 @@ The repository also contains shared packages under `packages/` (for example `pac
      - `apps/dashboard/.env`: `PUBLIC_SERVER_URL`, `PRIVATE_SERVER_KEY`, `PUBLIC_IS_SELFHOSTED`
    - Optional for self-hosted Enterprise-only features (SSO, token-auth, no-tracking): set `LICENSE_KEY` in `apps/api/.env`
 
-6. Start local infrastructure for API (Postgres + Redis) and seed the DB:
+4. Start local infrastructure for API (Postgres + Redis) and seed the DB:
 
    ```bash
-   docker compose -f docker/docker-compose.yaml up -d postgres redis db-init
+   docker compose -f docker/docker-compose.yaml up -d postgres redis
    ```
 
    - Connect with `DATABASE_URL=postgresql://postgres:postgres@localhost:5432/classroomio`
    - Connect with `REDIS_URL=redis://localhost:6379`
-   - The `db-init` container runs migrations/seed once Postgres is healthy.
 
-7. (Optional) Start MinIO locally for object storage (media/documents):
+5. (Optional) Start MinIO locally for object storage (media/documents):
 
    ```bash
    docker compose -f docker/docker-compose.yaml --profile minio up -d minio minio-init
@@ -151,7 +200,7 @@ The repository also contains shared packages under `packages/` (for example `pac
      - `OBJECT_STORAGE_FORCE_PATH_STYLE=true`
      - `OBJECT_STORAGE_MEDIA_PUBLIC_BASE_URL=http://localhost:9000/media`
 
-8. Run the local app services in separate terminals:
+6. Run the local app services in separate terminals:
 
    ```bash
    pnpm api:dev
@@ -161,17 +210,17 @@ The repository also contains shared packages under `packages/` (for example `pac
    pnpm dashboard:dev
    ```
 
-9. Default local URLs:
+7. Default local URLs:
 
    - `api`: [http://localhost:3002](http://localhost:3002)
    - `dashboard`: [http://localhost:5173](http://localhost:5173)
 
-10. Optional: run other apps:
+8. Optional: run other apps:
 
    - **website**: `pnpm website:dev`
    - **docs**: `pnpm dev --filter=@cio/docs`
 
-11. Login into `dashboard`:
+9. Login into `dashboard`:
 
     - Visit [http://localhost:5173/login](http://localhost:5173/login)
     - Enter email: `admin@test.com`

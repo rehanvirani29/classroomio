@@ -4,6 +4,7 @@
   import type { Component } from 'svelte';
 
   import { appInitApi } from '$features/app/init.svelte';
+  import { authClient } from '$lib/utils/services/auth/client';
   import { Spinner } from '@cio/ui/base/spinner';
   import { Button } from '@cio/ui/base/button';
   import FrownIcon from '@lucide/svelte/icons/frown';
@@ -24,6 +25,15 @@
   let ThemeComponent = $state<Component<any> | null>(null);
 
   const hasSetupError = $derived(!appInitApi.loading && !!appInitApi.error);
+
+  // Root `/` is outside the (app) route group, so it has no redirect-to-login guard.
+  // When the session resolves with no data on a non-org-site, send the user to /login.
+  const session = authClient.useSession();
+  $effect(() => {
+    if (!data.isOrgSite && !$session.isPending && !$session.isRefetching && !$session.data) {
+      window.location.href = '/login';
+    }
+  });
 
   const pageTitle = $derived(
     data.isOrgSite && data.org ? data.org.name : "ClassroomIO - The Course Platform That's Actually Easy To Use"

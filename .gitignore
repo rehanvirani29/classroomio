@@ -44,6 +44,9 @@ vite.config.ts*.mjs
 #Ignore vscode AI rules
 .github/instructions/codacy.instructions.md
 
+# Claude Code local project config
+.claude/
+
 tsconfig.tsbuildinfo*
 
 storybook-static

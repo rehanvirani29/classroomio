@@ -51,6 +51,15 @@ importers:
 
   apps/api:
     dependencies:
+      '@ai-sdk/anthropic':
+        specifier: ^3.0.69
+        version: 3.0.69(zod@4.2.1)
+      '@ai-sdk/google':
+        specifier: ^3.0.0
+        version: 3.0.64(zod@4.2.1)
+      '@ai-sdk/openai':
+        specifier: ^3.0.52
+        version: 3.0.52(zod@4.2.1)
       '@aws-sdk/client-s3':
         specifier: ^3.388.0
         version: 3.958.0
@@ -93,6 +102,9 @@ importers:
       axios:
         specifier: ^1.4.0
         version: 1.13.2
+      css-tree:
+        specifier: ^3.2.1
+        version: 3.2.1
       dotenv:
         specifier: ^16.3.1
         version: 16.6.1
@@ -13159,6 +13171,12 @@ snapshots:
 
   '@adobe/css-tools@4.4.4': {}
 
+  '@ai-sdk/anthropic@3.0.69(zod@4.2.1)':
+    dependencies:
+      '@ai-sdk/provider': 3.0.8
+      '@ai-sdk/provider-utils': 4.0.23(zod@4.2.1)
+      zod: 4.2.1
+
   '@ai-sdk/anthropic@3.0.69(zod@4.3.6)':
     dependencies:
       '@ai-sdk/provider': 3.0.8
@@ -13179,6 +13197,12 @@ snapshots:
       '@vercel/oidc': 3.1.0
       zod: 4.3.6
 
+  '@ai-sdk/google@3.0.64(zod@4.2.1)':
+    dependencies:
+      '@ai-sdk/provider': 3.0.8
+      '@ai-sdk/provider-utils': 4.0.23(zod@4.2.1)
+      zod: 4.2.1
+
   '@ai-sdk/google@3.0.64(zod@4.3.6)':
     dependencies:
       '@ai-sdk/provider': 3.0.8
@@ -13197,6 +13221,12 @@ snapshots:
       '@ai-sdk/provider': 3.0.10
       '@ai-sdk/provider-utils': 4.0.26(zod@4.3.6)
       zod: 4.3.6
+
+  '@ai-sdk/openai@3.0.52(zod@4.2.1)':
+    dependencies:
+      '@ai-sdk/provider': 3.0.8
+      '@ai-sdk/provider-utils': 4.0.23(zod@4.2.1)
+      zod: 4.2.1
 
   '@ai-sdk/openai@3.0.52(zod@4.3.6)':
     dependencies:

@@ -14,7 +14,7 @@
     "classroomio-mcp": "./dist/index.js"
   },
   "scripts": {
-    "build": "tsc --noEmit && rm -rf dist tsconfig.tsbuildinfo && node ./scripts/build.mjs",
+    "build": "tsc --noEmit && node -e \"['dist','tsconfig.tsbuildinfo'].forEach(p=>require('fs').rmSync(p,{recursive:true,force:true}))\" && node ./scripts/build.mjs",
     "dev": "tsx src/index.ts",
     "start": "node dist/index.js",
     "format": "prettier --write \"src/**/*.ts\""

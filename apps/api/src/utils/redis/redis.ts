@@ -1,9 +1,11 @@
 import { createClient, type RedisClientType } from 'redis';
 import { env } from '@api/config/env';
 
-// Create Redis client
+// Create Redis client. reconnectStrategy: false makes client.connect() reject
+// immediately when unavailable instead of retrying forever (which would block server startup).
 const client: RedisClientType = createClient({
-  url: env.REDIS_URL
+  url: env.REDIS_URL,
+  socket: { reconnectStrategy: false }
 });
 
 let hasLoggedRedisUnavailable = false;

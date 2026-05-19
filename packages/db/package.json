@@ -8,7 +8,7 @@
     "dist"
   ],
   "scripts": {
-    "build": "rm -rf dist tsconfig.tsbuildinfo && tsc && tsc-alias",
+    "build": "node -e \"['dist','tsconfig.tsbuildinfo'].forEach(p=>require('fs').rmSync(p,{recursive:true,force:true}))\" && tsc && tsc-alias",
     "dev": "tsc --watch",
     "db": "drizzle-kit",
     "db:reset": "tsx src/scripts/db-reset.ts --skip-seed",
